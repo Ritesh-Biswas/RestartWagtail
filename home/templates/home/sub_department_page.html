@@ -12,6 +12,43 @@
             {{ page.description|richtext }}
         </div>
 
+        <div class="content-sections">
+            <div class="announcements">
+                <h2>Announcements</h2>
+                {% with page.get_children.type.home.AnnouncementPage.live.specific as announcements %}
+                    {% if announcements %}
+                        <ul>
+                        {% for announcement in announcements %}
+                            <li>
+                                <a href="{% pageurl announcement %}">{{ announcement.name }}</a>
+                                <span class="date">{{ announcement.date_posted|date:"F j, Y" }}</span>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No announcements yet.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <div class="faqs">
+                <h2>FAQs</h2>
+                {% with page.get_children.type.home.FAQPage.live.specific as faqs %}
+                    {% if faqs %}
+                        <ul>
+                        {% for faq in faqs %}
+                            <li>
+                                <a href="{% pageurl faq %}">{{ faq.question }}</a>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No FAQs available.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
         <div class="site-admins">
             <h2>Site Administrators</h2>
             {% if page.site_admins.all %}
@@ -70,6 +107,53 @@
     .site-admins li {
         padding: 5px 0;
         color: #444;
+    }
+
+    .content-sections {
+        margin: 30px 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+
+    .announcements, .faqs {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .announcements h2, .faqs h2 {
+        color: #43b1b0;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+    }
+
+    .announcements ul, .faqs ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .announcements li, .faqs li {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .announcements a, .faqs a {
+        color: #333;
+        text-decoration: none;
+        display: block;
+    }
+
+    .announcements a:hover, .faqs a:hover {
+        color: #43b1b0;
+    }
+
+    .date {
+        display: block;
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 3px;
     }
 </style>
 {% endblock %}

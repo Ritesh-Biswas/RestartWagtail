@@ -47,8 +47,45 @@ class SubDepartmentPage(Page):
 
     template = 'home/sub_department_page.html'
     parent_page_types = ['home.DepartmentPage']
-    subpage_types = []  # No child pages allowed
+    subpage_types = ['home.AnnouncementPage', 'home.FAQPage']  
 
     class Meta:
         verbose_name = "Sub Department"
         verbose_name_plural = "Sub Departments"
+
+
+class AnnouncementPage(Page):
+    name = models.CharField(max_length=200)
+    description = RichTextField()
+    date_posted = models.DateTimeField(auto_now_add=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('name'),
+        FieldPanel('description'),
+    ]
+
+    template = 'home/announcement_page.html'
+    parent_page_types = ['home.SubDepartmentPage']
+    subpage_types = []  # No child pages allowed
+
+    class Meta:
+        verbose_name = "Announcement"
+        verbose_name_plural = "Announcements"
+        ordering = ['-date_posted']
+
+class FAQPage(Page):
+    question = models.CharField(max_length=200)
+    answer = RichTextField()
+
+    content_panels = Page.content_panels + [
+        FieldPanel('question'),
+        FieldPanel('answer'),
+    ]
+
+    template = 'home/faq_page.html'
+    parent_page_types = ['home.SubDepartmentPage']
+    subpage_types = []  # No child pages allowed
+
+    class Meta:
+        verbose_name = "FAQ"
+        verbose_name_plural = "FAQs"

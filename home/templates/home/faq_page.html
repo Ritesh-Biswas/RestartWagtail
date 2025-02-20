@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-faqpage{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="faq">
+        <h1>{{ page.question }}</h1>
+        <div class="answer">
+            {{ page.answer|richtext }}
+        </div>
+        <a href="{{ page.get_parent.url }}" class="back-link">← Back to {{ page.get_parent.name }}</a>
+    </article>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .faq {
+        background: white;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .faq h1 {
+        color: #43b1b0;
+        margin-bottom: 20px;
+    }
+
+    .answer {
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: #43b1b0;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

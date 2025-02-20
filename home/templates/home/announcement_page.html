@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-announcementpage{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="announcement">
+        <h1>{{ page.name }}</h1>
+        <div class="meta">Posted on: {{ page.date_posted|date:"F j, Y" }}</div>
+        <div class="description">
+            {{ page.description|richtext }}
+        </div>
+        <a href="{{ page.get_parent.url }}" class="back-link">← Back to {{ page.get_parent.name }}</a>
+    </article>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .announcement {
+        background: white;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .announcement h1 {
+        color: #43b1b0;
+        margin-bottom: 10px;
+    }
+
+    .meta {
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    .description {
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: #43b1b0;
+        text-decoration: none;
+        margin-top: 20px;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
