@@ -1,32 +1,32 @@
 {% extends "base.html" %}
 {% load wagtailcore_tags %}
 
-{% block body_class %}template-departmentpage{% endblock %}
+{% block body_class %}template-subdepartmentpage{% endblock %}
 
 {% block content %}
 <div class="container">
-    <article class="department">
-        <h1>{{ page.dept_name }}</h1>
+    <article class="subdepartment">
+        <h1>{{ page.name }}</h1>
+        
         <div class="description">
             {{ page.description|richtext }}
         </div>
 
-        {% if page.get_children %}
-        <div class="sub-departments">
-            <h2>Sub Departments</h2>
-            <ul>
-            {% for sub_dept in page.get_children.specific %}
-                <li>
-                    <a href="{% pageurl sub_dept %}">{{ sub_dept.name }}</a>
-                </li>
-            {% endfor %}
-            </ul>
+        <div class="site-admins">
+            <h2>Site Administrators</h2>
+            {% if page.site_admins.all %}
+                <ul>
+                {% for admin in page.site_admins.all %}
+                    <li>{{ admin.get_full_name|default:admin.username }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No site administrators assigned.</p>
+            {% endif %}
         </div>
-        {% endif %}
     </article>
 </div>
 
-{% block extra_css %}
 <style>
     .container {
         max-width: 800px;
@@ -34,14 +34,14 @@
         padding: 0 20px;
     }
 
-    .department {
+    .subdepartment {
         background: white;
         padding: 30px;
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .department h1 {
+    .subdepartment h1 {
         color: #43b1b0;
         margin-bottom: 20px;
     }
@@ -51,34 +51,25 @@
         margin-bottom: 30px;
     }
 
-    .sub-departments {
+    .site-admins {
         border-top: 1px solid #eee;
         padding-top: 20px;
     }
 
-    .sub-departments h2 {
+    .site-admins h2 {
         color: #666;
         font-size: 1.2em;
         margin-bottom: 10px;
     }
 
-    .sub-departments ul {
+    .site-admins ul {
         list-style: none;
         padding: 0;
     }
 
-    .sub-departments li {
+    .site-admins li {
         padding: 5px 0;
-    }
-
-    .sub-departments a {
-        color: #43b1b0;
-        text-decoration: none;
-    }
-
-    .sub-departments a:hover {
-        text-decoration: underline;
+        color: #444;
     }
 </style>
-{% endblock %}
 {% endblock %}
