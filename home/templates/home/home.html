@@ -10,7 +10,7 @@
         {% if request.user.is_superuser %}
         <a href="{% url 'wagtailadmin_home' %}" class="admin-button">Go to Admin</a>
         {% endif %}
-        <a href="{% url 'wagtailadmin_logout' %}" class="logout-button">Logout</a>
+        <a href="{% url 'home:logout' %}" class="logout-button">Logout</a>
     </div>
 </div>
 

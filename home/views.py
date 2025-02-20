@@ -1,10 +1,12 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.views.generic import FormView, TemplateView
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
+# from wagtail.admin.auth import logout
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
@@ -26,7 +28,12 @@ class LoginView(FormView):
         
         if user is not None and user.is_superuser:
             login(self.request, user)
-            return redirect(reverse('wagtailadmin_home'))
+            return redirect('home:home')
         else:
             messages.error(self.request, "Invalid username or password or insufficient permissions.")
             return self.form_invalid(form)
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('home:login')
