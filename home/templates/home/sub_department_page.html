@@ -15,14 +15,14 @@
         <div class="content-sections">
             <div class="announcements">
                 <h2>Announcements</h2>
-                {% with page.get_children.type.home.AnnouncementPage.live.specific as announcements %}
+                {% comment %} {% with page.get_children as announcements %} {% endcomment %}
                     {% if announcements %}
                         <ul>
                         {% for announcement in announcements %}
+                        
                             <li>
                                 <a href="{% pageurl announcement %}" target="_blank" rel="noopener noreferrer">
-                                    {{ announcement.name }}
-                                    <span class="date">{{ announcement.date_posted|date:"F j, Y" }}</span>
+                                    {{ announcement }}
                                 </a>
                             </li>
                         {% endfor %}
@@ -30,24 +30,26 @@
                     {% else %}
                         <p>No announcements yet.</p>
                     {% endif %}
-                {% endwith %}
+                {% comment %} {% endwith %} {% endcomment %}
             </div>
 
             <div class="faqs">
                 <h2>FAQs</h2>
-                {% with page.get_children.type.home.FAQPage.live.specific as faqs %}
-                    {% if faqs %}
-                        <ul>
-                        {% for faq in faqs %}
-                            <li>
-                                <a href="{% pageurl faq %}">{{ faq.question }}</a>
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No FAQs available.</p>
-                    {% endif %}
-                {% endwith %}
+                {% if faqs %}
+                <ul>
+                {% for faq in faqs %}
+                
+                    <li>
+                        <a href="{% pageurl faq %}" target="_blank" rel="noopener noreferrer">
+                            {{ faq }}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No FAQs yet.</p>
+            {% endif %}
+                    
             </div>
         </div>
 

@@ -54,12 +54,13 @@ class SubDepartmentView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         subdepartment = self.object
+        # print("Announcments data:-",AnnouncementPage.objects.child_of(subdepartment).live().specific("Announcement"))
         
        
-        context['announcements'] = AnnouncementPage.objects.child_of(subdepartment).live().specific().order_by('-date_posted')
+        context['announcements'] = AnnouncementPage.objects.child_of(subdepartment).live().specific("Announcement").order_by('-date_posted')
         
      
-        context['faqs'] = FAQPage.objects.child_of(subdepartment).live().specific()
+        context['faqs'] = FAQPage.objects.child_of(subdepartment).live().specific("FAQ")
         
         return context
 
