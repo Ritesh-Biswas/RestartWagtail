@@ -20,8 +20,10 @@
                         <ul>
                         {% for announcement in announcements %}
                             <li>
-                                <a href="{% pageurl announcement %}">{{ announcement.name }}</a>
-                                <span class="date">{{ announcement.date_posted|date:"F j, Y" }}</span>
+                                <a href="{% pageurl announcement %}" target="_blank" rel="noopener noreferrer">
+                                    {{ announcement.name }}
+                                    <span class="date">{{ announcement.date_posted|date:"F j, Y" }}</span>
+                                </a>
                             </li>
                         {% endfor %}
                         </ul>
@@ -154,6 +156,14 @@
         font-size: 0.9em;
         color: #666;
         margin-top: 3px;
+    }
+
+    .announcements a::after, .faqs a::after {
+        content: '↗';
+        display: inline-block;
+        margin-left: 5px;
+        font-size: 0.9em;
+        opacity: 0.7;
     }
 </style>
 {% endblock %}
