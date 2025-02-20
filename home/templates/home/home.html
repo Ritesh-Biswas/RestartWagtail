@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <h1>Welcome, {{ request.user.username }}!</h1>
+    <div class="actions">
+        {% if request.user.is_superuser %}
+        <a href="{% url 'wagtailadmin_home' %}" class="admin-button">Go to Admin</a>
+        {% endif %}
+        <a href="{% url 'wagtailadmin_logout' %}" class="logout-button">Logout</a>
+    </div>
+</div>
+
+<style>
+    .home-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .actions {
+        margin-top: 20px;
+    }
+
+    .admin-button, .logout-button {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 0 10px;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .admin-button {
+        background-color: #43b1b0;
+        color: white;
+    }
+
+    .logout-button {
+        background-color: #666;
+        color: white;
+    }
+
+    .admin-button:hover {
+        background-color: #358c8b;
+    }
+
+    .logout-button:hover {
+        background-color: #555;
+    }
+</style>
+{% endblock %}
