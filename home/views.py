@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, DetailView
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from wagtail.models import Page
-from .models import DepartmentPage
+from .models import DepartmentPage, SubDepartmentPage, AnnouncementPage, FAQPage
 # from wagtail.admin.auth import logout
 
 class HomeView(LoginRequiredMixin, TemplateView):
@@ -45,3 +45,24 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('home:login')
+
+class SubDepartmentView(LoginRequiredMixin, DetailView):
+    model = SubDepartmentPage
+    template_name = 'home/sub_department_page.html'
+    context_object_name = 'page'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        subdepartment = self.object
+        
+       
+        context['announcements'] = AnnouncementPage.objects.child_of(subdepartment).live().specific().order_by('-date_posted')
+        
+     
+        context['faqs'] = FAQPage.objects.child_of(subdepartment).live().specific()
+        
+        return context
+
+    def get_object(self, queryset=None):
+        # Get the page by its slug
+        return get_object_or_404(SubDepartmentPage, slug=self.kwargs['slug'])

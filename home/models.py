@@ -5,6 +5,7 @@ from wagtail.admin.panels import FieldPanel,MultipleChooserPanel
 from django.contrib.auth.models import User
 from modelcluster.fields import ParentalManyToManyField
 from django import forms 
+from modelcluster.fields import ParentalKey
 
 
 class HomePage(Page):
