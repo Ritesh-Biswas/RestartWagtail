@@ -1,16 +1,39 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static wagtailcore_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
 {% block content %}
 <div class="home-container">
     <h1>Welcome, {{ request.user.username }}!</h1>
+    
+    {% if request.user.is_superuser %}
     <div class="actions">
-        {% if request.user.is_superuser %}
         <a href="{% url 'wagtailadmin_home' %}" class="admin-button">Go to Admin</a>
-        {% endif %}
         <a href="{% url 'home:logout' %}" class="logout-button">Logout</a>
+    </div>
+    {% endif %}
+
+    <div class="departments-list">
+        <h2>Available-Departments</h2>
+        {% for department in departments %}
+            <div class="department-section">
+                <h3>{{ department.dept_name }}</h3>
+                {% if department.get_children %}
+                    <ul class="sub-departments-list">
+                    {% for sub_dept in department.get_children.specific %}
+                        <li>
+                            <a href="{% pageurl sub_dept %}" target="_blank" class="sub-dept-link">
+                                {{ sub_dept.name }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="no-sub-departments">No sub-departments available</p>
+                {% endif %}
+            </div>
+        {% endfor %}
     </div>
 </div>
 
@@ -23,7 +46,7 @@
     }
 
     .actions {
-        margin-top: 20px;
+        margin: 20px 0 30px;
     }
 
     .admin-button, .logout-button {
@@ -50,6 +73,65 @@
 
     .logout-button:hover {
         background-color: #555;
+    }
+
+    .departments-list {
+        text-align: left;
+        margin-top: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .departments-list h2 {
+        color: #43b1b0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .department-section {
+        margin-bottom: 25px;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+    }
+
+    .department-section h3 {
+        color: #666;
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid #43b1b0;
+    }
+
+    .sub-departments-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sub-departments-list li {
+        margin: 8px 0;
+    }
+
+    .sub-dept-link {
+        display: inline-block;
+        color: #43b1b0;
+        text-decoration: none;
+        padding: 5px 10px;
+        border: 1px solid #43b1b0;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+    }
+
+    .sub-dept-link:hover {
+        background-color: #43b1b0;
+        color: white;
+    }
+
+    .no-sub-departments {
+        color: #999;
+        font-style: italic;
     }
 </style>
 {% endblock %}

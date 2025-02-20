@@ -6,11 +6,19 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from wagtail.models import Page
+from .models import DepartmentPage
 # from wagtail.admin.auth import logout
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
     login_url = '/login/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get all department pages
+        context['departments'] = DepartmentPage.objects.live().specific()
+        return context
 
 class LoginView(FormView):
     template_name = 'home/login.html'
