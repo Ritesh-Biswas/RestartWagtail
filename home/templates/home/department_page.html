@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}template-departmentpage{% endblock %}
+
+{% block content %}
+<div class="container">
+    <article class="department">
+        <h1>{{ page.dept_name }}</h1>
+        <div class="description">
+            {{ page.description|richtext }}
+        </div>
+    </article>
+</div>
+
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .department {
+        background: white;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .department h1 {
+        color: #43b1b0;
+        margin-bottom: 20px;
+    }
+
+    .description {
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}
+{% endblock %}
