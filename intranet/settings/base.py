@@ -232,4 +232,5 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # if untrusted users are allowed to upload files -
 # see https://docs.wagtail.org/en/stable/advanced_topics/deploying.html#user-uploaded-files
 WAGTAILDOCS_EXTENSIONS = ['csv', 'docx', 'key', 'odt', 'pdf', 'pptx', 'rtf', 'txt', 'xlsx', 'zip']
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+#If you faced any issue related to npm then uncomment the below line and provide the path of npm
+# NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
