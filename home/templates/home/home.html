@@ -6,12 +6,6 @@
 {% block content %}
 <div class="home-container">
     <h1>Welcome, {{ request.user.username }}!</h1>
-    
-    <div class="actions">
-        <a href="{% url 'wagtailadmin_home' %}" class="admin-button">Go to Admin</a>
-        <a href="{% url 'home:logout' %}" class="logout-button">Logout</a>
-    </div>
-
     <div class="departments-list">
         <h2>Available-Departments</h2>
         {% for department in departments %}
