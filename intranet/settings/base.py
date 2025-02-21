@@ -26,6 +26,9 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     "home",
     "search",
+    "tailwind",
+    "theme",
+    'widget_tweaks',
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -51,6 +54,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.microsoft",
 ]
+
+TAILWIND_APP_NAME = "theme"
+INTERNAL_IPS = ['127.0.0.1'] #Because we are going to run two server one is tailwind and other is django
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
