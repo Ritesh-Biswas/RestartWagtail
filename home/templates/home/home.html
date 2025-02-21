@@ -6,14 +6,6 @@
 {% block content %}
 <div class="home-container">
     <h1>Welcome, {{ request.user.username }}!</h1>
-    
-    {% if request.user.is_superuser %}
-    <div class="actions">
-        <a href="{% url 'wagtailadmin_home' %}" class="admin-button">Go to Admin</a>
-        <a href="{% url 'home:logout' %}" class="logout-button">Logout</a>
-    </div>
-    {% endif %}
-
     <div class="departments-list">
         <h2>Available-Departments</h2>
         {% for department in departments %}
@@ -23,7 +15,7 @@
                     <ul class="sub-departments-list">
                     {% for sub_dept in department.get_children.specific %}
                         <li>
-                            <a href="{% pageurl sub_dept %}" target="_blank" class="sub-dept-link">
+                            <a href="{% pageurl sub_dept %}" class="sub-dept-link">
                                 {{ sub_dept.name }}
                             </a>
                         </li>

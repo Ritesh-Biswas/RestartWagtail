@@ -5,6 +5,7 @@ from wagtail.admin.panels import FieldPanel,MultipleChooserPanel
 from django.contrib.auth.models import User
 from modelcluster.fields import ParentalManyToManyField
 from django import forms 
+from modelcluster.fields import ParentalKey
 
 
 class HomePage(Page):
@@ -67,7 +68,7 @@ class AnnouncementPage(Page):
     template = 'home/announcement_page.html'
     parent_page_types = ['home.SubDepartmentPage']
     subpage_types = []  # No child pages allowed
-
+    
     class Meta:
         verbose_name = "Announcement"
         verbose_name_plural = "Announcements"
