@@ -29,10 +29,105 @@
         {% block extra_css %}
         {# Override this in templates to add extra stylesheets #}
         {% endblock %}
+
+        <style>
+            .navbar {
+                background-color: #ffffff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                padding: 1rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #43b1b0;
+                text-decoration: none;
+            }
+
+            .profile-dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            .profile-button {
+                background: none;
+                border: none;
+                color: #333;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .profile-button:hover {
+                color: #43b1b0;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                right: 0;
+                background-color: #fff;
+                min-width: 160px;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                border-radius: 4px;
+                z-index: 1;
+            }
+
+            .dropdown-content a {
+                color: #333;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+                color: #43b1b0;
+            }
+
+            .profile-dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            /* Add some spacing below navbar */
+            .content-wrapper {
+                padding-top: 1rem;
+            }
+        </style>
     </head>
+
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
+
+        <nav class="navbar">
+            <a href="/" class="logo">INTRANET</a>
+            {% if request.user.is_authenticated %}
+            <div class="profile-dropdown">
+                <button class="profile-button">
+                    <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div class="dropdown-content">
+                    {% if request.user.is_staff %}
+                        <a href="{% url 'wagtailadmin_home' %}">Admin Dashboard</a>
+                    {% endif %}
+                    <a href="{% url 'home:logout' %}">Logout</a>
+                </div>
+            </div>
+            {% endif %}
+        </nav>
 
         {% block content %}{% endblock %}
 
