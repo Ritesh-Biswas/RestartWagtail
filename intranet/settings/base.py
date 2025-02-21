@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "search",
     "tailwind",
     "theme",
+    'widget_tweaks',
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
