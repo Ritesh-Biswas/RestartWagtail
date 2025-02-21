@@ -21,7 +21,7 @@
                     <ul class="sub-departments-list">
                     {% for sub_dept in department.get_children.specific %}
                         <li>
-                            <a href="{% pageurl sub_dept %}" target="_blank" class="sub-dept-link">
+                            <a href="{% pageurl sub_dept %}" class="sub-dept-link">
                                 {{ sub_dept.name }}
                             </a>
                         </li>

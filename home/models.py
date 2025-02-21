@@ -9,9 +9,9 @@ from modelcluster.fields import ParentalKey
 
 
 class HomePage(Page):
-    template = 'home/home_page.html'
+    template = 'home/home_page.html' #this is used to specify the template for the page
 
-    subpage_types = ['home.DepartmentPage']
+    subpage_types = ['home.DepartmentPage'] #this is for making sure that only DepartmentPage can be created as a child page of HomePage
 
 class DepartmentPage(Page):
     dept_name = models.CharField(max_length=100)
