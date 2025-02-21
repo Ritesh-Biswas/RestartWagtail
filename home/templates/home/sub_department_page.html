@@ -1,171 +1,99 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load static tailwind_tags wagtailcore_tags %}
+{% tailwind_css %}
 
 {% block body_class %}template-subdepartmentpage{% endblock %}
 
-{% block content %}
-<div class="container">
-    <article class="subdepartment">
-        <h1>{{ page.name }}</h1>
-        
-        <div class="description">
-            {{ page.description|richtext }}
-        </div>
-
-        <div class="content-sections">
-            <div class="announcements">
-                <h2>Announcements</h2>
-                {% comment %} {% with page.get_children as announcements %} {% endcomment %}
-                    {% if announcements %}
-                        <ul>
-                        {% for announcement in announcements %}
-                        
-                            <li>
-                                <a href="{% pageurl announcement %}"  rel="noopener noreferrer">
-                                    {{ announcement }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p>No announcements yet.</p>
-                    {% endif %}
-                {% comment %} {% endwith %} {% endcomment %}
-            </div>
-
-            <div class="faqs">
-                <h2>FAQs</h2>
-                {% if faqs %}
-                <ul>
-                {% for faq in faqs %}
-                
-                    <li>
-                        <a href="{% pageurl faq %}"  rel="noopener noreferrer">
-                            {{ faq }}
-                        </a>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>No FAQs yet.</p>
-            {% endif %}
-                    
-            </div>
-        </div>
-
-        <div class="site-admins">
-            <h2>Site Administrators</h2>
-            {% if page.site_admins.all %}
-                <ul>
-                {% for admin in page.site_admins.all %}
-                    <li>{{ admin.get_full_name|default:admin.username }}</li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>No site administrators assigned.</p>
-            {% endif %}
-        </div>
-    </article>
-</div>
-
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    .container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-
-    .subdepartment {
-        background: white;
-        padding: 30px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .subdepartment h1 {
-        color: #43b1b0;
-        margin-bottom: 20px;
-    }
-
-    .description {
-        line-height: 1.6;
-        margin-bottom: 30px;
-    }
-
-    .site-admins {
-        border-top: 1px solid #eee;
-        padding-top: 20px;
-    }
-
-    .site-admins h2 {
-        color: #666;
-        font-size: 1.2em;
-        margin-bottom: 10px;
-    }
-
-    .site-admins ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .site-admins li {
-        padding: 5px 0;
-        color: #444;
-    }
-
-    .content-sections {
-        margin: 30px 0;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-    }
-
-    .announcements, .faqs {
-        background: #f9f9f9;
-        padding: 20px;
-        border-radius: 5px;
-    }
-
-    .announcements h2, .faqs h2 {
-        color: #43b1b0;
-        margin-bottom: 15px;
-        font-size: 1.2em;
-    }
-
-    .announcements ul, .faqs ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .announcements li, .faqs li {
-        margin-bottom: 10px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #eee;
-    }
-
-    .announcements a, .faqs a {
-        color: #333;
-        text-decoration: none;
-        display: block;
-    }
-
-    .announcements a:hover, .faqs a:hover {
-        color: #43b1b0;
-    }
-
-    .date {
-        display: block;
-        font-size: 0.9em;
-        color: #666;
-        margin-top: 3px;
-    }
-
-    .announcements a::after, .faqs a::after {
-        content: '↗';
-        display: inline-block;
-        margin-left: 5px;
-        font-size: 0.9em;
-        opacity: 0.7;
+    body {
+        font-family: 'Inter', sans-serif;
     }
 </style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
+    <div class="grid grid-cols-12 gap-6">
+        <!-- Left Sidebar - Announcements & FAQs -->
+        <div class="col-span-12 lg:col-span-3 space-y-6">
+            <!-- Announcements Section -->
+<div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 transition-all duration-300 hover:shadow-xl">
+    <div class="flex items-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2c9fda]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+        </svg>
+        <h2 class="text-xl font-bold text-gray-900 ml-2">Announcements</h2>
+    </div>
+    
+    {% if announcements %}
+        <div class="space-y-3 h-48 overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #E5E7EB transparent;">
+        {% for announcement in announcements %}
+            <a href="{% pageurl announcement %}" class="block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors duration-200 border border-gray-100 hover:border-indigo-100">
+                <h3 class="font-semibold text-gray-900">{{ announcement }}</h3>
+                <p class="text-sm text-gray-500 mt-1">{{ announcement.date_posted|date:"F j, Y" }}</p>
+            </a>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-500 italic text-center py-4">No announcements yet.</p>
+    {% endif %}
+</div>
+
+<!-- FAQs Section -->
+<div class="bg-white rounded-xl shadow-lg p-6 border border-gray-200 transition-all duration-300 hover:shadow-xl">
+    <div class="flex items-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#2c9fda]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h2 class="text-xl font-bold text-gray-900 ml-2">FAQs</h2>
+    </div>
+
+    {% if faqs %}
+        <div class="space-y-3 h-48 overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #E5E7EB transparent;">
+        {% for faq in faqs %}
+            <a href="{% pageurl faq %}" class="block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors duration-200 border border-gray-100 hover:border-indigo-100">
+                <h3 class="font-semibold text-gray-900">{{ faq }}</h3>
+            </a>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-500 italic text-center py-4">No FAQs yet.</p>
+    {% endif %}
+</div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="col-span-12 lg:col-span-9">
+            <!-- Page Header with Name and Admins -->
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ page.name }}</h1>
+                
+                <!-- Site Administrators List -->
+                <div class="flex items-center text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#2c9fda] mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    {% if page.site_admins.all %}
+                        <div class="flex flex-wrap gap-2">
+                            {% for admin in page.site_admins.all %}
+                                <span class="text-sm bg-gray-100 px-3 py-1 rounded-full">
+                                    {{ admin.get_full_name|default:admin.username }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <span class="text-sm italic">No site administrators assigned</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Empty Content Area for Future Use -->
+            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 min-h-[500px]">
+                <!-- Future content will go here -->
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
