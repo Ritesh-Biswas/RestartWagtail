@@ -8,7 +8,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from wagtail.models import Page
 from .models import DepartmentPage, SubDepartmentPage, AnnouncementPage, FAQPage
-# from wagtail.admin.auth import logout
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
@@ -16,8 +15,17 @@ class HomeView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Get all department pages
-        context['departments'] = DepartmentPage.objects.live().specific()
+        user = self.request.user
+        if user.is_superuser:
+            context['departments'] = SubDepartmentPage.objects.live().specific()
+            return context
+
+        user_sub_departments = []
+        sub_departments = SubDepartmentPage.objects.live().specific()
+        for sub_department in sub_departments:
+            if user in sub_department.members.all() or user in sub_department.site_admins.all():
+                user_sub_departments.append(sub_department)
+        context['departments'] = user_sub_departments
         return context
 
 class LoginView(FormView):

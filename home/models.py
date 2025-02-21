@@ -39,11 +39,20 @@ class SubDepartmentPage(Page):
         blank=True,
         limit_choices_to={'is_superuser': False}
     )
+    members = ParentalManyToManyField(
+        User,
+        related_name='department_members',
+        blank=True,
+        limit_choices_to={'is_superuser': False}
+    )
+
+
 
     content_panels = Page.content_panels + [
         FieldPanel('name'),
         FieldPanel('description'),
         FieldPanel('site_admins', widget=forms.CheckboxSelectMultiple),
+        FieldPanel('members', widget=forms.CheckboxSelectMultiple),
     ]
 
     template = 'home/sub_department_page.html'
