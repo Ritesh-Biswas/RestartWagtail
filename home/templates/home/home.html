@@ -8,24 +8,20 @@
     <h1>Welcome, {{ request.user.username }}!</h1>
     <div class="departments-list">
         <h2>Available-Departments</h2>
-        {% for department in departments %}
-            <div class="department-section">
-                <h3>{{ department.dept_name }}</h3>
-                {% if department.get_children %}
-                    <ul class="sub-departments-list">
-                    {% for sub_dept in department.get_children.specific %}
-                        <li>
-                            <a href="{% pageurl sub_dept %}" class="sub-dept-link">
-                                {{ sub_dept.name }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="no-sub-departments">No sub-departments available</p>
-                {% endif %}
-            </div>
-        {% endfor %}
+        {% if departments %}
+            <ul class="sub-departments-list">
+            {% for sub_dept in departments %}
+                <li>
+                    <a href="{% pageurl sub_dept %}" class="sub-dept-link">
+                        {{ sub_dept.name }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-sub-departments">No Departments available</p>
+        {% endif %}
+
     </div>
 </div>
 
