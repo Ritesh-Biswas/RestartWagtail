@@ -34,58 +34,75 @@
         {% wagtailuserbar %}
 
         <!-- Responsive Navigation Bar -->
-        <nav class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
-                    <!-- Logo Section -->
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="/" class="text-2xl font-bold text-teal-600 hover:text-teal-700 transition-colors">
-                            INTRANET
+                    <!-- Logo and Main Nav Section -->
+                    <div class="flex items-center">
+                        <a href="/" class="flex items-center">
+                            
+                            <span class="ml-2 text-xl font-bold text-[#2c9fda]">INTRANET</span>
                         </a>
+                        
+                        
                     </div>
-
-                    <!-- Profile Dropdown - Desktop -->
-                    {% if request.user.is_authenticated %}
-                    <div class="hidden sm:ml-6 sm:flex sm:items-center">
-                        <div class="relative" id="desktop-menu-container">
-                            <button type="button" 
-                                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-teal-600 focus:outline-none transition-colors" 
-                                    id="desktop-menu-button" 
-                                    aria-expanded="false" 
-                                    aria-haspopup="true">
-                                <span class="mr-2">{{ request.user.get_full_name|default:request.user.username }}</span>
-                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
-
-                            <!-- Dropdown Menu -->
-                            <div class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" 
-                                 id="desktop-menu-dropdown" 
-                                 role="menu" 
-                                 aria-orientation="vertical" 
-                                 aria-labelledby="desktop-menu-button" 
-                                 tabindex="-1">
-                                {% if request.user.is_staff %}
-                                <a href="{% url 'wagtailadmin_home' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-teal-600" role="menuitem">Admin Dashboard</a>
-                                {% endif %}
-                                <a href="{% url 'home:logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-teal-600" role="menuitem">Logout</a>
+        
+                    <!-- Right Side - User Profile and Mobile Menu -->
+                    <div class="flex items-center">
+                        {% if request.user.is_authenticated %}
+                        
+        
+                        <!-- Desktop Profile Dropdown -->
+                        <div class="hidden md:ml-4 md:flex md:items-center">
+                            <div class="relative" id="desktop-menu-container">
+                                <button type="button" 
+                                        class="flex items-center px-3 py-2 text-sm font-medium text-gray-900 hover:text-[#2c9fda] transition-colors" 
+                                        id="desktop-menu-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+                                    <svg class="ml-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+        
+                                <!-- Dropdown Menu -->
+                                <div class="hidden absolute right-0 mt-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5" 
+                                     id="desktop-menu-dropdown">
+                                    {% if request.user.is_staff %}
+                                    <a href="{% url 'wagtailadmin_home' %}" 
+                                       class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-[#2c9fda] transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        Admin Dashboard
+                                    </a>
+                                    {% endif %}
+                                    <a href="{% url 'home:logout' %}" 
+                                       class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-[#2c9fda] transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                        </svg>
+                                        Logout
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Mobile menu button -->
-                    <div class="sm:hidden flex items-center">
-                        <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-teal-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500" aria-controls="mobile-menu" aria-expanded="false">
+                        
+                                        <!-- Mobile menu button -->
+                        <button type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-indigo-600 hover:bg-gray-100 transition-colors" id="mobile-menu-button">
                             <span class="sr-only">Open main menu</span>
-                            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
+                        {% endif %}
                     </div>
-                    {% endif %}
                 </div>
             </div>
+
 
             <!-- Mobile menu -->
             {% if request.user.is_authenticated %}
@@ -109,35 +126,42 @@
         <script type="text/javascript" src="{% static 'js/intranet.js' %}"></script>
 
         <script>
-            // Mobile menu toggle
-            document.querySelector('.mobile-menu-button').addEventListener('click', function() {
-                document.getElementById('mobile-menu').classList.toggle('hidden');
-            });
+                    // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
 
-            // Desktop dropdown menu toggle
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+                // Desktop dropdown toggle
             const desktopMenuButton = document.getElementById('desktop-menu-button');
             const desktopMenuDropdown = document.getElementById('desktop-menu-dropdown');
             const desktopMenuContainer = document.getElementById('desktop-menu-container');
 
-            // Toggle menu on button click
-            desktopMenuButton.addEventListener('click', function(event) {
-                desktopMenuDropdown.classList.toggle('hidden');
-                event.stopPropagation();
-            });
+            if (desktopMenuButton && desktopMenuDropdown && desktopMenuContainer) {
+                // Toggle menu on button click
+                desktopMenuButton.addEventListener('click', (event) => {
+                    desktopMenuDropdown.classList.toggle('hidden');
+                    event.stopPropagation();
+                });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!desktopMenuContainer.contains(event.target)) {
-                    desktopMenuDropdown.classList.add('hidden');
-                }
-            });
+                // Close menu when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!desktopMenuContainer.contains(event.target)) {
+                        desktopMenuDropdown.classList.add('hidden');
+                    }
+                });
 
-            // Close menu when pressing Escape key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') {
-                    desktopMenuDropdown.classList.add('hidden');
-                }
-            });
+                // Close menu when pressing Escape key
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        desktopMenuDropdown.classList.add('hidden');
+                    }
+                });
+            }
         </script>
 
         {% block extra_js %}
