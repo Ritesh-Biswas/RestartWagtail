@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% load static tailwind_tags wagtailcore_tags %}
 {% tailwind_css %}
 
@@ -92,6 +93,7 @@
             <!-- Empty Content Area for Future Use -->
             <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 min-h-[500px]">
                 <!-- Future content will go here -->
+                {% include "home/announcement_page.html" %}
             </div>
         </div>
     </div>

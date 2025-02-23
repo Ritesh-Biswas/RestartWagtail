@@ -1,59 +1,52 @@
 {% extends "base.html" %}
-{% load wagtailcore_tags %}
+{% load static tailwind_tags wagtailcore_tags %}
+{% tailwind_css %}
 
 {% block body_class %}template-announcementpage{% endblock %}
 
-{% block content %}
-<div class="container">
-    <article class="announcement">
-        <h1>{{ page.name }}</h1>
-        <div class="meta">Posted on: {{ page.date_posted|date:"F j, Y" }}</div>
-        <div class="description">
-            {{ page.description|richtext }}
-        </div>
-        <a href="{{ page.get_parent.url }}" class="back-link">← Back to {{ page.get_parent.name }}</a>
-    </article>
-</div>
-
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    .container {
-        max-width: 800px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-
-    .announcement {
-        background: white;
-        padding: 30px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .announcement h1 {
-        color: #43b1b0;
-        margin-bottom: 10px;
-    }
-
-    .meta {
-        color: #666;
-        font-size: 0.9em;
-        margin-bottom: 20px;
-    }
-
-    .description {
-        line-height: 1.6;
-        margin-bottom: 30px;
-    }
-
-    .back-link {
-        display: inline-block;
-        color: #43b1b0;
-        text-decoration: none;
-        margin-top: 20px;
-    }
-
-    .back-link:hover {
-        text-decoration: underline;
+    body {
+        font-family: 'Inter', sans-serif;
     }
 </style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
+    <div class="max-w-4xl mx-auto">
+        <article class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 transition-all duration-300 hover:shadow-xl">
+            <!-- Header Section -->
+            <div class="flex items-center space-x-4 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#2c9fda]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
+                <h1 class="text-3xl font-bold text-gray-900">{{ page.name }}</h1>
+            </div>
+
+            <!-- Meta Information -->
+            <div class="flex items-center text-gray-600 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span class="text-sm">Posted on: {{ page.date_posted|date:"F j, Y" }}</span>
+            </div>
+
+            <!-- Description Content -->
+            <div class="prose max-w-none text-gray-600 mb-8">
+                {{ page.description|richtext }}
+            </div>
+
+            <!-- Back Link -->
+            <a href="{{ page.get_parent.url }}" 
+               class="inline-flex items-center text-[#2c9fda] hover:text-[#2280b0] transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to {{ page.get_parent.name }}
+            </a>
+        </article>
+    </div>
+</div>
 {% endblock %}
