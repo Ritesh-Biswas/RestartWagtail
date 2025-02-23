@@ -30,8 +30,10 @@
     
     {% if announcements %}
         <div class="space-y-3 h-48 overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #E5E7EB transparent;">
-        {% for announcement in announcements %}
-            <a href="{% pageurl announcement %}" class="block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors duration-200 border border-gray-100 hover:border-indigo-100">
+            {% for announcement in announcements %}
+            <a href="{% pageurl announcement %}" 
+               class="announcement-link block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors duration-200 border border-gray-100 hover:border-indigo-100"
+               data-announcement-id="{{ announcement.id }}">
                 <h3 class="font-semibold text-gray-900">{{ announcement }}</h3>
                 <p class="text-sm text-gray-500 mt-1">{{ announcement.date_posted|date:"F j, Y" }}</p>
             </a>
@@ -54,8 +56,10 @@
     {% if faqs %}
         <div class="space-y-3 h-48 overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #E5E7EB transparent;">
         {% for faq in faqs %}
-            <a href="{% pageurl faq %}" class="block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors duration-200 border border-gray-100 hover:border-indigo-100">
-                <h3 class="font-semibold text-gray-900">{{ faq }}</h3>
+            <a href="{% pageurl faq %}" 
+            class="faq-link block p-4 bg-gray-50 rounded-lg hover:bg-indigo-50 transition-colors duration-200 border border-gray-100 hover:border-indigo-100" 
+            data-faq-id="{{ faq.id }}">
+                <h3 class="font-semibold text-gray-900">{{ faq.question }}</h3>
             </a>
         {% endfor %}
         </div>
@@ -91,11 +95,108 @@
             </div>
 
             <!-- Empty Content Area for Future Use -->
-            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 min-h-[500px]">
-                <!-- Future content will go here -->
-                {% include "home/announcement_page.html" %}
+            <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-200 min-h-[500px]" id="content-area">
+                {% if selected_announcement %}
+                    <div class="space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900">{{ selected_announcement.name }}</h2>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-sm">{{ selected_announcement.date_posted|date:"F j, Y" }}</span>
+                        </div>
+                        <div class="prose max-w-none">
+                            {{ selected_announcement.description|richtext }}
+                        </div>
+                    </div>
+                {% elif selected_faq %}
+                    <div class="space-y-4">
+                        <h2 class="text-2xl font-bold text-gray-900">{{ selected_faq.question }}</h2>
+                        <div class="prose max-w-none">
+                            {{ selected_faq.answer|richtext }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex items-center justify-center h-full text-gray-500">
+                        <p>Select an announcement to view its content</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const announcementLinks = document.querySelectorAll('.announcement-link');
+    const faqLinks = document.querySelectorAll('.faq-link');
+    const contentArea = document.getElementById('content-area');
+
+    announcementLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const announcementId = this.dataset.announcementId;
+            
+            // Updating URL with announcement ID without page reload
+            const url = new URL(window.location);
+            url.searchParams.set('announcement_id', announcementId);
+            window.history.pushState({}, '', url);
+
+            // Fetching announcement content
+            fetch(`${window.location.pathname}?announcement_id=${announcementId}`)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newContent = doc.getElementById('content-area');
+                    contentArea.innerHTML = newContent.innerHTML;
+                })
+                .catch(error => console.error('Error:', error));
+            
+            // Updating active state of links
+            announcementLinks.forEach(l => l.classList.remove('bg-indigo-50', 'border-indigo-100'));
+            this.classList.add('bg-indigo-50', 'border-indigo-100');
+        });
+    });
+
+    // Handle FAQ clicks
+    faqLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const faqId = this.dataset.faqId;
+            console.log('Clicked FAQ ID:', faqId);
+            
+            // Update URL
+            const url = new URL(window.location);
+            url.searchParams.delete('announcement_id');
+            url.searchParams.set('faq_id', faqId);
+            console.log('New URL:', url.toString());
+            
+            window.history.pushState({}, '', url);
+
+            // Fetch content
+            fetch(`${window.location.pathname}?faq_id=${faqId}`)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newContent = doc.getElementById('content-area');
+                    if (newContent) {
+                        contentArea.innerHTML = newContent.innerHTML;
+                        console.log('FAQ content updated successfully');
+                    } else {
+                        console.error('Content area not found in response');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            
+            // Update active states
+            announcementLinks.forEach(l => l.classList.remove('bg-indigo-50', 'border-indigo-100'));
+            faqLinks.forEach(l => l.classList.remove('bg-indigo-50', 'border-indigo-100'));
+            this.classList.add('bg-indigo-50', 'border-indigo-100');
+        });
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

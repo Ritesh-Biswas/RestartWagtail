@@ -62,13 +62,37 @@ class SubDepartmentView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         subdepartment = self.object
-        # print("Announcments data:-",AnnouncementPage.objects.child_of(subdepartment).live().specific("Announcement"))
-        
        
+        announcements = AnnouncementPage.objects.child_of(subdepartment).live().specific()
+        print("---->Available Annoucments:", [(announcement.id, announcement.name) for announcement in announcements])
         context['announcements'] = AnnouncementPage.objects.child_of(subdepartment).live().specific("Announcement").order_by('-date_posted')
         
-     
+        faqs = FAQPage.objects.child_of(subdepartment).live().specific()
+        print("---->Available FAQs:", [(faq.id, faq.question) for faq in faqs])
         context['faqs'] = FAQPage.objects.child_of(subdepartment).live().specific("FAQ")
+        
+        announcement_id = self.request.GET.get('announcement_id')
+        faq_id = self.request.GET.get('faq_id')
+        print("Announcement id is:-",announcement_id)
+        print("FAQ id is:-",faq_id)
+
+       
+
+        if announcement_id:
+            context['selected_announcement'] = get_object_or_404(
+            AnnouncementPage, 
+            id=announcement_id,
+            path__startswith=subdepartment.path
+            
+        )
+        elif faq_id:
+            context['selected_faq'] = get_object_or_404(
+            FAQPage,
+            id=faq_id,
+            path__startswith=subdepartment.path
+        )
+             
+                
         
         return context
 
